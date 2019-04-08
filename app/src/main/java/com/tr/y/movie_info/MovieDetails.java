@@ -30,6 +30,7 @@ public class MovieDetails extends AppCompatActivity {
     private String url = "https://api.themoviedb.org/3/movie/";
     String apiKey = "?api_key=09c283fd5b09f40f535f15345b503187&language=en-US";
     Response response = null;
+    String baseURI = "http://image.tmdb.org/t/p/w780/";;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,9 +76,9 @@ public class MovieDetails extends AppCompatActivity {
         ImageView banner = findViewById(R.id.banner);
 
         Glide.with(getApplicationContext())
-                .load(baseURI+movie.getPoster_path())
+                .load(baseURI+movieDetail.getBackdrop_path())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(holder.poster);
+                .into(banner);
 
         TextView content = findViewById(R.id.content);
         content.setText(movieDetail.getOverview());

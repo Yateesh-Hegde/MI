@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#19af4b</color>
+    <color name="colorPrimaryDark">#24ce51</color>
+    <color name="defaultBg">#efe6e6</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="bg_movie_rating">#048729</color>
-    <color name="bg_movie_lang">#cf3b74</color>
 </resources>

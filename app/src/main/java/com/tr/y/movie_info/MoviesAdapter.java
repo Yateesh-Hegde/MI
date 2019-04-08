@@ -2,6 +2,7 @@ package com.tr.y.movie_info;
  
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.widget.CircularProgressDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyViewHold
     private final Context configuration;
     private List<MovieInfo> moviesList;
     String baseURI = "http://image.tmdb.org/t/p/w92/";
+    CircularProgressDrawable circularProgressDrawable;
 
     public OnBottomReachedListener getOnBottomReachedListener() {
         return onBottomReachedListener;
@@ -50,6 +52,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyViewHold
     public MoviesAdapter(List<MovieInfo> moviesList, Context configuration) {
         this.moviesList = moviesList;
         this.configuration = configuration;
+        circularProgressDrawable = new CircularProgressDrawable(configuration);
+        circularProgressDrawable.setStrokeWidth(5f);
+        circularProgressDrawable.setCenterRadius(30f);
+        circularProgressDrawable.start();
 
     }
  
@@ -71,7 +77,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyViewHold
         holder.rating.setText(String.valueOf(movie.getVote_average()));
                     Glide.with(holder.itemView.getContext())
                         .load(baseURI+movie.getPoster_path())
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(circularProgressDrawable)
                         .into(holder.poster);
       holder.itemView.setOnClickListener(new View.OnClickListener() {
           public void onClick(View view) {
@@ -87,6 +93,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyViewHold
     private void launchMovieDetails(MovieInfo movie) {
         Intent intent = new Intent(configuration,MovieDetails.class);
         intent.putExtra("Movie",String.valueOf(movie.getId()));
+        intent.putExtra("MovieName",movie.getOriginal_title());
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         configuration.startActivity(intent);
     }
 

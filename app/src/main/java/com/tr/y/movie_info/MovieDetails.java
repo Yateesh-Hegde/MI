@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.CircularProgressDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.tr.y.movie_info.Models.MovieDetail;
 import com.tr.y.movie_info.Models.genere;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import okhttp3.MediaType;
@@ -31,13 +33,15 @@ public class MovieDetails extends AppCompatActivity {
     String apiKey = "?api_key=09c283fd5b09f40f535f15345b503187&language=en-US";
     Response response = null;
     String baseURI = "http://image.tmdb.org/t/p/w780/";;
+    private CircularProgressDrawable circularProgressDrawable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
         int movieId = Math.round(Float.parseFloat(String.valueOf(getIntent().getExtras().get("Movie"))));
-        getSupportActionBar().setTitle(String.valueOf(movieId));
+        getSupportActionBar().setTitle(String.valueOf(getIntent().getExtras().get("MovieName")));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         movieDetail = new MovieDetail();
         final OkHttpClient client = new OkHttpClient();
         MediaType mediaType = MediaType.parse("application/octet-stream");
@@ -46,6 +50,12 @@ public class MovieDetails extends AppCompatActivity {
                 .url(url+movieId+apiKey)
                 .get()
                 .build();
+
+        circularProgressDrawable = new CircularProgressDrawable(this);
+        circularProgressDrawable.setStrokeWidth(5f);
+        circularProgressDrawable.setCenterRadius(30f);
+        circularProgressDrawable.start();
+
 
         new AsyncTask<String ,String,String>(){
             @Override
@@ -70,6 +80,11 @@ public class MovieDetails extends AppCompatActivity {
 
 
     }
+    @Override
+    public boolean onSupportNavigateUp(){
+        this.finish();
+        return  true;
+    }
 
     private void populateView() {
 
@@ -77,7 +92,7 @@ public class MovieDetails extends AppCompatActivity {
 
         Glide.with(getApplicationContext())
                 .load(baseURI+movieDetail.getBackdrop_path())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(circularProgressDrawable)
                 .into(banner);
 
         TextView content = findViewById(R.id.content);
@@ -87,10 +102,13 @@ public class MovieDetails extends AppCompatActivity {
         date.setText(movieDetail.getRelease_date());
 
         TextView revenue = findViewById(R.id.revenue);
-        revenue.setText(String.valueOf(movieDetail.getRevenue()));
+        revenue.setText(String.valueOf("$"+BigDecimal.valueOf(movieDetail.getRevenue()/100000).toPlainString()+" Millions"));
 
         TextView budget = findViewById(R.id.budget);
-        budget.setText(String.valueOf(movieDetail.getBudget()));
+        budget.setText("$"+BigDecimal.valueOf(movieDetail.getBudget()/1000000).toPlainString()+" Million");
+
+        TextView time = findViewById(R.id.time);
+        time.setText(String.valueOf(movieDetail.getRuntime()+" minutes"));
 
         TextView rating = findViewById(R.id.rating);
         rating.setText(String.valueOf(movieDetail.getVote_average()));

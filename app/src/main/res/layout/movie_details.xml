@@ -35,6 +35,7 @@
 
 
         <TextView
+            android:layout_marginBottom="10dp"
             android:id="@+id/overView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -52,7 +53,7 @@
             <TextView
                 android:gravity="center"
                 android:layout_weight="1.5"
-                android:background="@color/bg_movie_rating"
+                android:background="@color/colorPrimary"
                 android:id="@+id/rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -67,7 +68,7 @@
             <TextView
                 android:gravity="center"
                 android:layout_weight="1.5"
-                android:background="@color/bg_movie_lang"
+                android:background="@color/colorAccent"
                 android:id="@+id/releaseLang"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
